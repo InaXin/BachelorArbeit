@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Productpreis vorhersagen</title>
+
+</head>
+
+<style type="text/css">
+    div{display:none;}
+</style>
+
+<body>
+    <select name = "select1" id = "select1" style="position:relative;left:50px; top:30px; width:240px;margin:0;FONT-SIZE:15pt;FONT-WEIGHT:normal">
+    <option selected disabled hidden>Choose here</option>
+    <option name = "option1" id = "option1" value = "value1">Elektroartikel</option>
+    <option name = "option2" id = "option2" value = "value2">Sport&Outdoor</option>
+    <option name = "option3" id = "option3" value = "value3">Baby&Kind</option>
+    <option name = "option4" id = "option4" value = "value4">Haus&Garten</option>
+    <option name = "option5" id = "option5" value = "value5">Essen&Trinken</option>
+    <option name = "option6" id = "option6" value = "value6">Gaming&Spielen</option>
+    <option name = "option7" id = "option7" value = "value7">Drogerie&Gesundheit</option>
+    <option name = "option8" id = "option8" value = "value6">Auto&Motorrad</option>
+    <option name = "option9" id = "option9" value = "value9">Mode&Accessoires</option>
+    <option name = "option10" id = "option10" value = "value10">Tierbedarf</option>
+    <option name = "option11" id = "option11" value = "value11">Alle Kategorien</option>
+    <option name = "option11" id = "option12" value = "value12">Alle Produkte</option>
+    <option name = "option11" id = "option13" value = "value12">Vorhersage</option>
+    </select>
+
+    <div id="div1" style="position:relative;left:200px;"><img src="image/Elektroartikel.svg" width="1000" height="900"/></div>
+    <div id="div2" style="position:relative;left:200px;"><img src="image/Sport&Outdoor.svg" width="1000" height="900"/></div>
+    <div id="div3" style="position:relative;left:200px;"><img src="image/Baby&Kind.svg" width="1000" height="900"/></div>
+    <div id="div4" style="position:relative;left:200px;"><img src="image/Haus&Garten.svg" width="1000" height="900"/></div>
+    <div id="div5" style="position:relative;left:200px;"><img src="image/Essen&Trinken.svg" width="1000" height="900"/></div>
+    <div id="div6" style="position:relative;left:200px;"><img src="image/Gaming&Spielen.svg" width="1000" height="900"/></div>
+    <div id="div7" style="position:relative;left:200px;"><img src="image/Drogerie&Gesundheit.svg" width="1000" height="900"/></div>
+    <div id="div8" style="position:relative;left:200px;"><img src="image/Auto&Motorrad.svg" width="1000" height="900"/></div>
+    <div id="div9" style="position:relative;left:200px;"><img src="image/Mode&Accessoires.svg" width="1000" height="900"/></div>
+    <div id="div10" style="position:relative;left:200px;"><img src="image/Tierbedarf.svg" width="1000" height="900"/></div>
+    <div id="div11" style="position:relative;left:200px;"><img src="image/categories.svg" width="1000" height="900"/></div>
+    <div id="div12" style="position:relative;left:200px;"><img src="image/AllProducts.svg" width="1000" height="900"/></div>
+    <div id="div13" style="position:relative;left:200px;"><img src="image/Predict_Alle Produkte.svg" width="1000" height="900"/></div>
+
+<!--    <input type="button" value="click" οnclick="cutDiv()"/>-->
+</body>
+
+<script>
+    var select = document.getElementById("select1");
+    select.onchange = function(){
+        var options = select.getElementsByTagName("option");
+        for(var i = 0; i < options.length; i++){
+            if(options[i].selected){
+                var divid = options[i].id.replace("option","div");
+                var divs = document.getElementsByTagName("div");
+                for(var j = 0; j < divs.length; j++){
+                    if(divid == divs[j].id){
+                        divs[j].style.display = "block";
+                    }else{
+                        divs[j].style.display = "none";
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+</html>
