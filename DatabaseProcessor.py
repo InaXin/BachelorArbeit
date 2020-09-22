@@ -210,9 +210,9 @@ if __name__ == "__main__":
     #product_processor.createProductTable(product_processor.db)
     #product_processor.createCategoryTable(product_processor.db)
 
-    dataframe_product = DataFormat.dataframe_product
-    datarame_category = DataFormat.dataframe_category
-    dataframe_product_category = DataFormat.dataframe_product_category
+    #dataframe_product = DataFormat.dataframe_product
+    #datarame_category = DataFormat.dataframe_category
+    #dataframe_product_category = DataFormat.dataframe_product_category
 
 ######################insert price in mysql############################
     # for i in range(len(dataframe_product['Produkt_ID'])):

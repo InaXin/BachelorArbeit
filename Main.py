@@ -12,7 +12,7 @@ databaseProcessor.db = pymysql.connect("localhost","root","6857","IdealoPreis")
 resultAllProducts = databaseProcessor.get_average_price_allDate()
 DatenPlotModel.plotAllProducts(resultAllProducts[0],resultAllProducts[1])
 
-###plotthe trend of different Category in one graph
+###plot the trend of different Category in one graph
 resultTopCategories = databaseProcessor.get_top_category()
 DatenPlotModel.plotAllCategory(resultTopCategories)
 
