@@ -5,6 +5,7 @@ from DatabaseProcessor import *
 from DatenPredictionModel import *
 from DatenPlotModel import *
 
+###connect database
 databaseProcessor = DatabaseProcessor.DatabaseProcesser()
 databaseProcessor.db = pymysql.connect("localhost","root","6857","IdealoPreis")
 
