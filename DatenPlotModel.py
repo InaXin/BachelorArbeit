@@ -5,6 +5,7 @@ import DatabaseProcessor
 
 
 class DatenPlotModel:
+
     #############function for plotting the trend of all products##########################################
     def plotAllProducts(x,y):
         fig = plt.figure(figsize=(12,6))
@@ -59,7 +60,6 @@ class DatenPlotModel:
        for key,value in dict_top_category.items():
           x,y = databaseProcessor.get_average_eachCategory(key)
           plt.plot(x,y,label = value)
-
        plt.title("Durchschnittliche Preisentwicklung nach Kategorien(von Sep. 2019 bis Sep. 2020)", fontsize=15)
        plt.xlabel("Datum")
        plt.ylabel("durchschnittliche Produktpreise (€)")
