@@ -23,6 +23,6 @@ print("future",future.tail())
 forecast = m.predict(future)
 print("forecast",forecast[['ds','yhat','yhat_lower','yhat_upper']].tail())
 
-#m.plot(forecast)
-m.plot_components(forecast)
+m.plot(forecast)
+#m.plot_components(forecast)
 plt.show()
