@@ -13,7 +13,7 @@ resultAllProducts = databaseProcessor.get_average_price_allDate()
 
 dict_price = {"ds":resultAllProducts[0],"y":resultAllProducts[1]}
 dataframe_avg_price = pd.DataFrame(dict_price)
-# print("dataframe_avg_price",dataframe_avg_price.head())
+#print("dataframe_avg_price",dataframe_avg_price.head())
 
 m = Prophet()
 m.fit(dataframe_avg_price)
@@ -45,6 +45,4 @@ fig = plt.gcf()
 fig.savefig('image/corona_policy.svg')
 plt.show()
 
-#m.plot(forecast)
-#m.plot_components(forecast)
-#plt.show()
+
