@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import os.path
 
-class DatenPredictionModel:
+class LstmModel:
 
     def pricePredictLSTM(dict_price,name):
         dataframe_avg_price = pd.DataFrame(dict_price)
