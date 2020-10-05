@@ -6,7 +6,7 @@ import os.path
 
 class LstmModel:
 
-    def pricePredictLSTM(dict_price,name):
+    def price_prediction_LSTM(dict_price,name):
         dataframe_avg_price = pd.DataFrame(dict_price)
         #print("dataframe_avg_price",dataframe_avg_price)
         data_training = dataframe_avg_price[dataframe_avg_price['date']< pd.to_datetime('2020-7-01') ].copy()

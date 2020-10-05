@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class ProphetModel:
 
     #############function for plotting the predition of all products##########################################
-    def predictionAllProducts(x,y):
+    def prediction_all_products(x,y):
         dict_price = {"ds":x,"y":y}
         dataframe_avg_price = pd.DataFrame(dict_price)
         #print("dataframe_avg_price",dataframe_avg_price.head())
@@ -42,7 +42,7 @@ class ProphetModel:
         plt.show()
 
     ###################function for plotting the prediction of each Category #####################################
-    def predictionEachCategory(x, y, categoryName):
+    def prediction_each_category(x, y, categoryName):
         fig = plt.figure(figsize=(12, 6))
         dict_price = {"ds": x, "y": y}
         dataframe_avg_price_eachCategory = pd.DataFrame(dict_price)

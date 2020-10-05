@@ -7,7 +7,7 @@ import DatabaseProcessor
 class DatenPlotModel:
 
     #############function for plotting the trend of all products##########################################
-    def plotAllProducts(x,y):
+    def plot_all_products(x,y):
         fig = plt.figure(figsize=(12,6))
         plt.plot(x,y)
         plt.vlines(pd.to_datetime('2020-01-27'), min(y), max(y), colors="r", linestyles="-.",linewidth=3,
@@ -28,7 +28,7 @@ class DatenPlotModel:
         plt.show()
 
     ###################function for plotting the trend of each Category #####################################
-    def plotEachCategory(x, y, categoryName):
+    def plot_each_category(x, y, categoryName):
         fig = plt.figure(figsize=(12, 6))
         plt.plot(x, y)
         try:
@@ -53,7 +53,7 @@ class DatenPlotModel:
         plt.show()
 
     ###################function for plotting the trend of different Category in one graph#####################################
-    def plotAllCategory(dict_top_category):
+    def plot_all_categories(dict_top_category):
        databaseProcessor = DatabaseProcessor.DatabaseProcesser()
        databaseProcessor.db = pymysql.connect("localhost", "root", "6857", "IdealoPreis")
        fig = plt.figure(figsize=(12,6))
