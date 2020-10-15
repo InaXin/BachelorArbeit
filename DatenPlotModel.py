@@ -16,8 +16,10 @@ class DatenPlotModel:
                    label= "Lock Down(22.03.20)"),
         plt.vlines(pd.to_datetime('2020-04-20'), min(y), max(y), colors="b", linestyles="-.",linewidth=3,
                    label= "Erste Lockerung(20.04.20)")
+        plt.vlines(pd.to_datetime('2020-10-13'),min(y),max(y),colors= "c", linestyles="-.",linewidth = 3,
+                   label= "Amazon Prime Day")
 
-        plt.title("Durchschnittliche Preisentwicklung von allen Produkten(von Sep. 2019 bis Sep. 2020)",fontsize=16)
+        plt.title("Durchschnittliche Preisentwicklung von allen Produkten(von Okt. 2019 bis Okt. 2020)",fontsize=16)
         plt.xlabel("Datum")
         plt.ylabel("durchschnittliche Produktpreise (€)")
 
@@ -31,19 +33,20 @@ class DatenPlotModel:
     def plot_each_category(x, y, categoryName):
         fig = plt.figure(figsize=(12, 6))
         plt.plot(x, y)
-        try:
-            plt.vlines(pd.to_datetime('2020-01-27'), min(y), max(y), colors="r", linestyles="-.",
+
+        plt.vlines(pd.to_datetime('2020-01-27'), min(y), max(y), colors="r", linestyles="-.",
                        linewidth=3,
                        label="Erste Erkrankung in Deutschland(27.01.20)")
-            plt.vlines(pd.to_datetime('2020-03-22'), min(y), max(y), colors="g", linestyles="-.",
+        plt.vlines(pd.to_datetime('2020-03-22'), min(y), max(y), colors="g", linestyles="-.",
                        linewidth=3,
                        label="Lock Down(22.03.20)"),
-            plt.vlines(pd.to_datetime('2020-04-20'), min(y), max(y), colors="b", linestyles="-.",
+        plt.vlines(pd.to_datetime('2020-04-20'), min(y), max(y), colors="b", linestyles="-.",
                        linewidth=3,
                        label="Erste Lockerung(20.04.20)")
-        except Exception as e:
-            pass
-        plt.title('%s(von Sep. 2019 bis Sep. 2020)'%categoryName, fontsize=15)
+        plt.vlines(pd.to_datetime('2020-10-13'), min(y), max(y), colors="c", linestyles="-.", linewidth=3,
+                       label="Amazon Prime Day")
+
+        plt.title('%s(von Okt. 2019 bis Okt. 2020)'%categoryName, fontsize=15)
         plt.xlabel("Datum")
         plt.ylabel("durchschnittliche Produktpreise (€)")
         plt.legend()
@@ -60,7 +63,7 @@ class DatenPlotModel:
        for key,value in dict_top_category.items():
           x,y = databaseProcessor.get_average_eachCategory(key)
           plt.plot(x,y,label = value)
-       plt.title("Durchschnittliche Preisentwicklung nach Kategorien(von Sep. 2019 bis Sep. 2020)", fontsize=15)
+       plt.title("Durchschnittliche Preisentwicklung nach Kategorien(von Okt. 2019 bis Okt. 2020)", fontsize=15)
        plt.xlabel("Datum")
        plt.ylabel("durchschnittliche Produktpreise (€)")
 

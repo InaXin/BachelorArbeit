@@ -28,13 +28,26 @@ class ProphetModel:
          'lower_window': -3,
          'upper_window': 3,
         })
-        events = corona_policy
-        m = Prophet(holidays=events)
+
+        amazon_prime_day = pd.DataFrame({
+            'holiday': 'amazon_prime_day',
+            'ds':pd.to_datetime(['2020-10-13','2020-10-14']),
+            'lower_window':0,
+            'upper_window':1,
+        })
+        holidays = pd.concat((corona_policy,amazon_prime_day))
+        m = Prophet(holidays=holidays)
         m.add_country_holidays(country_name='DE')
+
         #print("holidays_name",m.train_holiday_names)
+
         forecast = m.fit(dataframe_avg_price).predict(future)
         fig = m.plot_components(forecast)
         fig.savefig('image/Events.svg')
+
+        fig = plot_forecast_component(m,forecast,'amazon_prime_day')
+        fig = plt.gcf()
+        fig.savefig('image/amazon_prime_day.svg')
 
         fig = plot_forecast_component(m, forecast, 'corona_policy')
         fig = plt.gcf()
@@ -61,8 +74,15 @@ class ProphetModel:
                 'lower_window': -3,
                 'upper_window': 3,
             })
-            events = corona_policy
-            m = Prophet(holidays=events)
+
+            amazon_prime_day = pd.DataFrame({
+                'holiday': 'amazon_prime_day',
+                'ds': pd.to_datetime(['2020-10-13', '2020-10-14']),
+                'lower_window': 0,
+                'upper_window': 1,
+            })
+            holidays = pd.concat((corona_policy, amazon_prime_day))
+            m = Prophet(holidays=holidays)
             m.add_country_holidays(country_name='DE')
             forecast = m.fit(dataframe_avg_price_eachCategory).predict(future)
             fig = m.plot_components(forecast)

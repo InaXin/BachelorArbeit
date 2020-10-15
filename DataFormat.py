@@ -2,8 +2,11 @@ import pandas as pd
 import json
 import os
 
+
 excel_product = pd.ExcelFile('Daten/IdealoKategorien.xlsx')
 dataframe_product = excel_product.parse(excel_product.sheet_names[0])
+#print(dataframe_product)
+
 
 ###################all category number########################################################################
 category_id = 1
