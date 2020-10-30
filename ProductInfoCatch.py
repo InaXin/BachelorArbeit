@@ -92,7 +92,7 @@ for current_html in dataframe_html['ProductCategory']:
     current_result.append(current_result_first_page)
     #product info from second page to last page
     #for index in range(current_last_page-1):
-    for index in range(1):
+    for index in range(1):### second page
         change_str = 'I16-'+str(15*(index+1))
         str_list = list(current_html)
         str_list.insert(-5, change_str)
