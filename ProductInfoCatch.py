@@ -10,9 +10,9 @@ def productInfoCatch(url):
     chrome_driver = webdriver.Chrome(executable_path='chrome_driver/chromedriver')
     chrome_driver.get(url)
     time.sleep(2)
-    #Backöfen nächste Seite
+    #Backöfen next page
     #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[5]/a/span
-    #Bartschneider & Haarschneider nächste Seite
+    #Bartschneider & Haarschneider next page
     #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[5]/a/span
 
     # all products in first page
