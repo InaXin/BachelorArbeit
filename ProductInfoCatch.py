@@ -10,11 +10,6 @@ def productInfoCatch(url):
     chrome_driver = webdriver.Chrome(executable_path='chrome_driver/chromedriver')
     chrome_driver.get(url)
     time.sleep(2)
-    #Backöfen next page
-    #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[5]/a/span
-    #Bartschneider & Haarschneider next page
-    #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[5]/a/span
-
     # all products in first page
     # //*[@id="productcategory"]/main/div[3]/div[2]/div[3]/div[1]/a
     # //*[@id="productcategory"]/main/div[3]/div[2]/div[3]/div[2]/a
@@ -96,10 +91,11 @@ for current_html in dataframe_html['ProductCategory']:
     current_result_first_page = productInfoCatch(current_html)
     current_result.append(current_result_first_page)
     #product info from second page to last page
+    #for index in range(current_last_page-1):
     for index in range(1):
-        b = 'I16-'+str(15*(index+1))
+        change_str = 'I16-'+str(15*(index+1))
         str_list = list(current_html)
-        str_list.insert(-5, b)
+        str_list.insert(-5, change_str)
         new_html = ''.join(str_list)
         #print('new_html', new_html)
         current_result_other_page = productInfoCatch(new_html)
