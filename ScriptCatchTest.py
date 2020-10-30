@@ -45,24 +45,6 @@ import json
 # chrome_driver.quit()
 
 def product_info(url):
-    # utag_data = [{"site_tld": "de",
-    #               "page_type": "OFFERS_OF_PRODUCT",
-    #               "client_ip": "91.15.216.212",
-    #               "site_currency": "EUR",
-    #               "page_levels": ["Elektroartikel", "Haushaltselektronik", "Elektro-Großgeräte", "Backöfen",
-    #                               "Neff BVR 5522 N"],
-    #               "product_code": 4621842,
-    #               "product_ids": [4621842],
-    #               "product_names": ["Neff BVR 5522 N"],
-    #               "product_category_ids": [19194],
-    #               "product_available_since": "20141013",
-    #               "number_of_offers": 31,
-    #               "number_of_checkout_offers": 8,
-    #               "number_of_variants": 1,
-    #               "prices_last_updated": "2020-10-17T11:16",
-    #               "index_of_first_checkout_offer": 1,
-    #               "number_of_shoe_sizes": 0,
-    #               "promoline": False
     chrome_driver = webdriver.Chrome(executable_path='chrome_driver/chromedriver')
     chrome_driver.get(url)
     time.sleep(5)
