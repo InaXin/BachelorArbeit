@@ -63,7 +63,7 @@ def product_info(url):
     dict_product_info['Kategorie 1']= json_product[0]['page_levels'][0]
     dict_product_info['Kategorie 2'] = json_product[0]['page_levels'][1]
     dict_product_info['Kategorie 3'] = json_product[0]['page_levels'][2]
-    dict_product_info['Kategorie 4'] = '\''+json_product[0]['page_levels'][3]+'\''
+    dict_product_info['Kategorie 4'] = json_product[0]['page_levels'][3]
     dict_product_info['Produkt_Name'] = json_product[0]['page_levels'][4]
     dict_product_info['Produkt_ID'] = str(json_product[0]['product_ids'][0])
     print("dict_product_info:",dict_product_info)

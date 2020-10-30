@@ -74,23 +74,13 @@ def productInfoCatch(url):
     print('datastore',datastore)
     return datastore
 
-# def write_csv(list1, area, title):
-#     list1.insert(0, title)
-#     # 加入newline='' ,是为了删除形成表格时产生的空行
-#     # encoding=‘utf-8-sig’ ，是为了避免中文写入csv中时出现乱码
-#     with open(area, 'w', encoding='utf-8-sig', newline='') as csvFile:
-#         writer = csv.writer(csvFile)
-#         #写入多行用writerows
-#         writer.writerows(list1)
-#     print('close')
-
 excel_html = pd.ExcelFile('TestInfo.xlsx')
 dataframe_html = excel_html.parse(excel_html.sheet_names[0])
 
 #print(dataframe_html['ProductCategory'])
 current_result = []
 for current_html in dataframe_html['ProductCategory']:
-    #Backöfen letzte Seite
+    #Backöfen last page
     #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[4]/a
     #Bartschneider & Haarschneider
     #//*[@id="productcategory"]/main/div[3]/div[2]/nav/ul/li[4]/a
