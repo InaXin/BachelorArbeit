@@ -23,11 +23,13 @@ def productInfoCatch2(url):
     result_id_list = []
     for current_div in div_list:
         current_div = str(current_div)
-        #print("current_div",current_div)
-        id = str.split(current_div[current_div.find("productId"):current_div.find('}')],':"')[1].strip()[:-2]
+        print("current_div",current_div)
+        id = str.split(current_div[current_div.find("productId"):current_div.find('}')],':"')[1].strip()[:-1]
+        print('id',id)
+        print('type',type(id))
         result_id_list.append(id)
-    #print("result_id_list:",result_id_list)
-    #print(len(result_id_list))
+    print("result_id_list:",result_id_list)
+    print(len(result_id_list))
 
     result_name_list = []
     name_list = bs.find_all("div", {"class":"offerList-item-imageWrapper"})
@@ -50,10 +52,11 @@ def productInfoCatch2(url):
         result_temp.append(result_id_list[i])
         result.append(result_temp)
     print("result", result)
-
     return result
 
-file_name = 'SubHtmlExcel221-223.xlsx'
+#print(productInfoCatch2('https://www.idealo.de/preisvergleich/ProductCategory/19194.html'))
+
+file_name = 'SubHtmlExcel201-220.xlsx'
 excel_html = pd.ExcelFile(file_name)
 dataframe_html = excel_html.parse(excel_html.sheet_names[0])
 excel_name = 'Daten/Html(%s)ToProductExcel.xlsx'% file_name[12:-5]

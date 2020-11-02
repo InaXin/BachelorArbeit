@@ -1,15 +1,13 @@
-import DatabaseProcessor
 import LstmModel
 import DatenPlotModel
-from DatabaseProcessor import *
 from LstmModel import *
 from DatenPlotModel import *
 from ProphetModel import *
+from DataFormat import *
+from DatabaseProcessor import *
 
 ######connect database
-databaseProcessor = DatabaseProcessor.DatabaseProcesser()
-databaseProcessor.db = pymysql.connect("localhost","root","6857","IdealoPreis")
-
+databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
 ######plot the trend of all products
 result_all_products = databaseProcessor.get_average_price_all_date()
 #print(result_all_products[0],result_all_products[1])
@@ -36,7 +34,7 @@ for key,value in result_top_categories.items():
     result = databaseProcessor.get_average_eachCategory(key)
     #ProphetModel.prediction_each_category(result[0],result[1],value)
 
-
+databaseProcessor.close()
 
 
 

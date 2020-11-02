@@ -1,10 +1,13 @@
 import pymysql
 import json
-import DataFormat
+from DataFormat import *
 import pandas as pd
 import os
 
 class DatabaseProcesser:
+
+    def __init__(self,database_url,user,password,shema_name):
+        self.db = pymysql.connect(database_url,user,password,shema_name)
 ########################################create table Product#######################################
     def create_product_table(self, db):
         cursor = db.cursor()
@@ -44,7 +47,7 @@ class DatabaseProcesser:
                     )"""
         cursor.execute(sql)
 
-################################# insert price and date###########################################################
+################################# insert price and date for one row###########################################################
     def insert_price(self,dict_price):
         product_id = dict_price['product_id']
         product_price = dict_price['product_price']
@@ -58,6 +61,16 @@ class DatabaseProcesser:
             print(e)
             print('##############ProductProcesser.insert_price(self,dict_price)##############')
             self.db.rollback()
+
+################################# insert price and date for all rows###########################################################
+    def insert_all_prices(self,dataframe_product_price):
+        dict_price = dict()
+        for i in range(len(dataframe_product_price)):
+            dict_price.clear()
+            dict_price['product_id'] = dataframe_product_price['product_id'][i]
+            dict_price['product_price'] = dataframe_product_price['product_price'][i]
+            dict_price['price_date'] = dataframe_product_price['price_date'][i]
+            self.insert_price(dict_price)
 
 ###################################insert category#################################################################
     def insert_category(self,dataframe_category):
@@ -76,7 +89,7 @@ class DatabaseProcesser:
                 print('##############ProductProcesser.insert_category(self,dataframe_category)##############')
                 print(e)
                 print('##############ProductProcesser.insert_category(self,dataframe_category)##############')
-                self.rollback()
+                self.db.rollback()
 
 #########################################insert product########################################################
     def insert_product(self,dataframe_product_category):
@@ -95,6 +108,38 @@ class DatabaseProcesser:
                 print(e)
                 print('#################ProductProcessor.insert_product(self,dataframe_product_category)#############')
                 self.db.rollback()
+
+#######################################max_category_id################################################
+    def get_max_category_id(self):
+        current_result = 0
+        cursor = self.db.cursor()
+        sql = """select max(convert(category_id,signed)) from category"""
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            for row in result:
+                current_result = row
+                break
+        except Exception as e:
+            pass
+        if current_result == None:
+            current_result = 0
+        return current_result
+#######################################category_id by category_name################################################
+    def get_category_id(self,category_name):
+        current_result = -1
+        cursor = self.db.cursor()
+        sql = "select category_id from category where category_name = '%s'"%category_name
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            for row in result:
+                current_result = row
+                break
+        except Exception as e:
+            pass
+
+        return current_result
 
 #######################################average price by product################################################
     def get_average_price_byProduct(self,productID):
@@ -201,43 +246,26 @@ class DatabaseProcesser:
             return product_date,product_price
         except:
             print("Error: unable to fetch data")
+    def close(self):
+        self.db.close()
 
 ########################################main()####################################################################
 if __name__ == "__main__":
-    databaseProcessor = DatabaseProcesser()
-    databaseProcessor.db = pymysql.connect("localhost","root","6857","IdealoPreis")
+    databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
+    dataFormat = DataFormat('Daten/Html(1-20)ToProductExcel.xlsx')
 
-    # databaseProcessor.create_price_table(databaseProcessor.db)
-    # databaseProcessor.create_product_table(databaseProcessor.db)
-    # databaseProcessor.create_category_table(databaseProcessor.db)
-
-    dataframe_product = DataFormat.dataframe_product
-    datarame_category = DataFormat.dataframe_category
-    dataframe_product_category = DataFormat.dataframe_product_category
+    datarame_category = dataFormat.get_category()
+    dataframe_product = dataFormat.get_product()
+    dataframe_product_price = dataFormat.get_product_price()
 
 ######################insert price in mysql############################
-    # for i in range(len(dataframe_product['Produkt_ID'])):
-    #     id = dataframe_product['Produkt_ID'][i]
-    #     temp_url = 'https://www.idealo.de/offerpage/pricechart/api/{}?period=P1Y'.format(id)
-    #     print("temp_url",temp_url)
-    #     with os.popen('curl -k {}'.format(temp_url)) as p:
-    #         result = p.read()
-    #         dict_result = json.loads(result)
-    #         data_result = dict_result['data']
-    #         for data_temp in data_result:
-    #             current_date = data_temp['x']
-    #             current_price = data_temp['y']
-    #             price = dict()
-    #             price['product_id'] = id
-    #             price['product_price'] = current_price
-    #             price['price_date'] = current_date
-    #             databaseProcessor.insert_price(price)
+    databaseProcessor.insert_all_prices(dataframe_product_price)
 
 #################insert category in mysql##############################
-    #databaseProcessor.insert_category(datarame_category)
+    databaseProcessor.insert_category(datarame_category)
 
 #####################insert product in mysql##########################
-    #databaseProcessor.insert_product(dataframe_product_category)
+    databaseProcessor.insert_product(dataframe_product)
 
     ############get_average_price_byDate(self,priceDate)##############
     #databaseProcessor.get_average_price_byDate("\'" + '2020-01-20' + "\'")
@@ -255,4 +283,4 @@ if __name__ == "__main__":
     #databaseProcessor.get_product_price('6509891')
 
     ############database close##################################
-    databaseProcessor.db.close()
+    databaseProcessor.close()
