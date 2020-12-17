@@ -2,86 +2,109 @@ from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
 import json
+import os
 import pandas as pd
 
 def productInfoCatch2(url):
+
     chrome_driver = webdriver.Chrome(executable_path = 'chrome_driver/chromedriver')
     chrome_driver.get(url)
-    time.sleep(5)
+    time.sleep(2)
 
     current_html = chrome_driver.page_source
     bs = BeautifulSoup(current_html,'html.parser')
 
+    ###category scraping
     product_info = str.split(bs.find("script", {"id": "tagManagerDataLayer"}).string, '=')[1]
     product_info = product_info[0:product_info.find(';')]
     json_product = json.loads(product_info)
     category_list = json_product[0]["page_levels"]
-    #print("category_list",category_list)
+    print("category_list",category_list)
 
-    div_list = bs.find_all('div',{"class":'offerList-item'})
-    #id_list = str.split(div_list[div_list.find("productId"):div_list.find("}")],":")[1]
+    id_name_list = bs.find_all("div", {"class":"offerList-item-imageWrapper"})
+    print("len_id_name_list",len(id_name_list))
+
     result_id_list = []
-    for current_div in div_list:
-        current_div = str(current_div)
-        print("current_div",current_div)
-        id = str.split(current_div[current_div.find("productId"):current_div.find('}')],':"')[1].strip()[:-1]
-        print('id',id)
-        print('type',type(id))
-        result_id_list.append(id)
-    print("result_id_list:",result_id_list)
-    print(len(result_id_list))
-
     result_name_list = []
-    name_list = bs.find_all("div", {"class":"offerList-item-imageWrapper"})
-    #name_list = str.split(name_list[name_list.find("title="):name_list.find("/>")],"=")[1]
+    index = 1
+    for current_id_name in id_name_list:
+        current_id_name = str(current_id_name.find("img"))
+        #print(current_id_name)
 
-    for current_name in name_list:
-        current_name = str(current_name.find("img"))
-        #print("current_name",current_name)
-        current_name = str.split(current_name[current_name.find("title="):current_name.find('"/>')],'="')[1]
+        ###product id scraping
+        if '/de_DE' in current_id_name:
+            current_id = str(current_id_name[current_id_name.find("product/"):current_id_name.find("/de_DE")])
+        elif '/s1' in current_id_name:
+            current_id = str(current_id_name[current_id_name.find("Product/"):current_id_name.find("/s1")])
+        else:
+            current_id = "IDNoFound"
+
+        if current_id != "IDNoFound":
+            current_id = current_id[:current_id.rfind("/"):-1][::-1]
+
+        ###product name scraping
+        current_name = str(current_id_name[current_id_name.find("title="):current_id_name.find('/>')])[7:-1]
+        if current_name == '':
+            current_name = 'NameNoFound'
+
+        print('current_id',str(index)+")",current_id)
+        print('current_name',str(index)+")",current_name)
+        index = index+1
+        result_id_list.append(current_id)
         result_name_list.append(current_name)
-    #print("result_name_list:",result_name_list)
-    #print(len(result_name_list))
+    print("result_id_list",result_id_list)
+    print(len(result_id_list))
+    print("result_name-list",result_name_list)
+    print(len(result_name_list))
+
+    ###last page nummer scraping
+    #current_last_page_nummer = int(bs.find_all("li", {"class": "pagination-item"})[-2].find("a").text.strip())
+
     chrome_driver.quit()
-    result = []
+
+    result_product_info = []
     for i in range (len(result_id_list)):
         result_temp = []
+        result_temp.append(result_id_list[i])
+        result_temp.append(result_name_list[i])
         for category in category_list:
             result_temp.append(category)
-        result_temp.append(result_name_list[i])
-        result_temp.append(result_id_list[i])
-        result.append(result_temp)
-    print("result", result)
-    return result
+        result_temp.append(url)
+        result_product_info.append(result_temp)
+    print("result_product_info", result_product_info)
+    print(len(result_product_info))
 
-#print(productInfoCatch2('https://www.idealo.de/preisvergleich/ProductCategory/19194.html'))
+    return result_product_info
 
-file_name = 'SubHtmlExcel201-220.xlsx'
-excel_html = pd.ExcelFile(file_name)
+#print(productInfoCatch2('https://www.idealo.de/preisvergleich/ProductCategory/3832.html'))
+
+#=================read ProductCategory html Excel output proudct info======================
+excel_file_name = 'Test.xlsx'
+excel_html = pd.ExcelFile(excel_file_name)
 dataframe_html = excel_html.parse(excel_html.sheet_names[0])
-excel_name = 'Daten/Html(%s)ToProductExcel.xlsx'% file_name[12:-5]
-#print(excel_name)
 
 current_result = []
 for current_html in dataframe_html['ProductCategory']:
     try:
-        current_result_first_page = productInfoCatch2(current_html)
-        current_result.append(current_result_first_page)
+        current_result_first_page_info = productInfoCatch2(current_html)
+        current_result.append(current_result_first_page_info)
     except Exception as e:
         pass
+print('current_result:',current_result)
 
-dataframe_temp = pd.DataFrame(columns=['Kategorie 1','Kategorie 2','Kategorie 3','Kategorie 4','Produkt_Name','Produkt_ID'])
-for list_temp in current_result:
-    dict_temp = dict()
-    for item in list_temp:
-        current_length = len(item)
-        dict_temp['Produkt_ID'] = item[current_length-1]
-        dict_temp['Produkt_Name'] = item[current_length-2]
-        for index in range(current_length-2):
-            dict_temp[dataframe_temp.columns[index]] = item[index]
+#================ save data to json==========================================================
+json_file_name = 'Test.json'
+a = []
+if not os.path.isfile(json_file_name):
+    a.append(current_result)
+    with open(json_file_name, mode='w', encoding='utf-8') as f:
+        f.write(json.dumps(a,ensure_ascii=False,indent=4))
+else:
+    with open(json_file_name) as feedsjson:
+        feeds = json.load(feedsjson)
+        #print('feeds',feeds)
 
-        dataframe_temp = dataframe_temp.append(dict_temp,ignore_index=True)
-        dict_temp.clear()
-    dataframe_temp.to_excel(excel_name,index = False)
-
+    feeds.append(current_result)
+    with open(json_file_name, mode='w', encoding='utf-8') as f:
+        f.write(json.dumps(feeds,ensure_ascii=False,indent=4))
 

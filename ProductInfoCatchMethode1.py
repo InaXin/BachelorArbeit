@@ -69,7 +69,7 @@ def productInfoCatch(url):
     print('datastore',datastore)
     return datastore
 
-excel_html = pd.ExcelFile('TestInfo.xlsx')
+excel_html = pd.ExcelFile('Daten_Html/TestInfo.xlsx')
 dataframe_html = excel_html.parse(excel_html.sheet_names[0])
 
 #print(dataframe_html['ProductCategory'])
@@ -115,4 +115,4 @@ for list_temp in current_result:
 
         dataframe_temp = dataframe_temp.append(dict_temp,ignore_index=True)
         dict_temp.clear()
-    dataframe_temp.to_excel('DataToExcelTest.xlsx',index = False)
+    dataframe_temp.to_excel('Daten/DataToExcelTest.xlsx',index = False)

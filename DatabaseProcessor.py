@@ -30,7 +30,8 @@ class DatabaseProcesser:
         sql = """ create table Product_Price(
                  product_id varchar(30),
                  product_price double,
-                 price_date date
+                 price_date date,
+                 primary key(product_id,price_date)
                  )"""
         cursor.execute(sql)
 
@@ -41,7 +42,7 @@ class DatabaseProcesser:
         cursor.execute("drop table if exists Category")
 
         sql = """ create table Category(
-                    category_id varchar(30),
+                    category_id varchar(30) primary key,
                     category_name varchar(255),
                     super_category_id varchar (30)
                     )"""
@@ -58,6 +59,7 @@ class DatabaseProcesser:
             cursor.execute(sql)
             self.db.commit()
         except Exception as e:
+            print('##############ProductProcesser.insert_price(self,dict_price)##############')
             print(e)
             print('##############ProductProcesser.insert_price(self,dict_price)##############')
             self.db.rollback()
@@ -80,15 +82,15 @@ class DatabaseProcesser:
             super_category_id = 0
             if pd.notna(dataframe_category['super_category_id'][row_index]):
                 super_category_id = dataframe_category['super_category_id'][row_index]
-            sql = """insert into category values (%s,%s,%s)""" % (category_id, '\'' + category_name + '\'', super_category_id)
+            sql = """insert into category values (%s,%s,%s)""" % (category_id, '\"' + category_name + '\"', super_category_id)
             cursor = self.db.cursor()
             try:
                 cursor.execute(sql)
                 self.db.commit()
             except Exception as e:
-                print('##############ProductProcesser.insert_category(self,dataframe_category)##############')
+                print('##############ProductProcesser.insert_category(self,dataframe_category)################################')
                 print(e)
-                print('##############ProductProcesser.insert_category(self,dataframe_category)##############')
+                print('##############ProductProcesser.insert_category(self,dataframe_category)################################')
                 self.db.rollback()
 
 #########################################insert product########################################################
@@ -97,7 +99,10 @@ class DatabaseProcesser:
             product_id = dataframe_product_category['product_id'][row_index]
             product_name = dataframe_product_category['product_name'][row_index]
             category_id = dataframe_product_category['category_id'][row_index]
-            sql = """insert into product values (%s,%s,%s)""" % (product_id, '\'' + product_name + '\'', category_id)
+            if '"' in product_name:
+                sql = """insert into product values (%s,%s,%s)""" % (product_id, '\'' + product_name + '\'', category_id)
+            else:
+                sql = """insert into product values (%s,%s,%s)""" % (product_id, '\"' + product_name + '\"', category_id)
             cursor = self.db.cursor()
             try:
                 print(sql)
@@ -252,20 +257,20 @@ class DatabaseProcesser:
 ########################################main()####################################################################
 if __name__ == "__main__":
     databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
-    dataFormat = DataFormat('Daten/Html(1-20)ToProductExcel.xlsx')
+    dataFormat = DataFormat('Daten/Json(ProductsInfo(201-300))ToExcel(6).xlsx')
 
     datarame_category = dataFormat.get_category()
-    dataframe_product = dataFormat.get_product()
+    dataframe_product_category = dataFormat.get_product()
     dataframe_product_price = dataFormat.get_product_price()
 
 ######################insert price in mysql############################
     databaseProcessor.insert_all_prices(dataframe_product_price)
 
 #################insert category in mysql##############################
-    databaseProcessor.insert_category(datarame_category)
+   # databaseProcessor.insert_category(datarame_category)
 
 #####################insert product in mysql##########################
-    databaseProcessor.insert_product(dataframe_product)
+   # databaseProcessor.insert_product(dataframe_product_category)
 
     ############get_average_price_byDate(self,priceDate)##############
     #databaseProcessor.get_average_price_byDate("\'" + '2020-01-20' + "\'")

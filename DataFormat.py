@@ -41,6 +41,24 @@ class DataFormat:
                 if dict_category_number[category_name] == -1:
                     dict_category_number[category_name] = category_id
                     category_id = category_id + 1
+        for category_name in self.dataframe_product['Kategorie 5']:
+            if category_name is not None and category_name not in dict_category_number.keys():
+                dict_category_number[category_name] = databaseProcessor.get_category_id(category_name)
+                if dict_category_number[category_name] == -1:
+                    dict_category_number[category_name] = category_id
+                    category_id = category_id + 1
+        for category_name in self.dataframe_product['Kategorie 6']:
+            if category_name is not None and category_name not in dict_category_number.keys():
+                dict_category_number[category_name] = databaseProcessor.get_category_id(category_name)
+                if dict_category_number[category_name] == -1:
+                    dict_category_number[category_name] = category_id
+                    category_id = category_id + 1
+        for category_name in self.dataframe_product['Kategorie 7']:
+            if category_name is not None and category_name not in dict_category_number.keys():
+                dict_category_number[category_name] = databaseProcessor.get_category_id(category_name)
+                if dict_category_number[category_name] == -1:
+                    dict_category_number[category_name] = category_id
+                    category_id = category_id + 1
         databaseProcessor.close()
         return dict_category_number
 
@@ -76,13 +94,34 @@ class DataFormat:
                 dataframe_category = dataframe_category.append(dict_current, ignore_index=True)
                 dict_current.clear()
                 continue
+            if curent_category_name in self.dataframe_product['Kategorie 5'].values:
+                dict_current['category_id'] = self.dict_category_number[curent_category_name]
+                dict_current['category_name'] = curent_category_name
+                dict_current['super_category_id'] = self.dict_category_number[self.dataframe_product[self.dataframe_product['Kategorie 5'] == curent_category_name]['Kategorie 4'].values[0]]
+                dataframe_category = dataframe_category.append(dict_current, ignore_index=True)
+                dict_current.clear()
+                continue
+            if curent_category_name in self.dataframe_product['Kategorie 6'].values:
+                dict_current['category_id'] = self.dict_category_number[curent_category_name]
+                dict_current['category_name'] = curent_category_name
+                dict_current['super_category_id'] = self.dict_category_number[self.dataframe_product[self.dataframe_product['Kategorie 6'] == curent_category_name]['Kategorie 5'].values[0]]
+                dataframe_category = dataframe_category.append(dict_current, ignore_index=True)
+                dict_current.clear()
+                continue
+            if curent_category_name in self.dataframe_product['Kategorie 7'].values:
+                dict_current['category_id'] = self.dict_category_number[curent_category_name]
+                dict_current['category_name'] = curent_category_name
+                dict_current['super_category_id'] = self.dict_category_number[self.dataframe_product[self.dataframe_product['Kategorie 7'] == curent_category_name]['Kategorie 6'].values[0]]
+                dataframe_category = dataframe_category.append(dict_current, ignore_index=True)
+                dict_current.clear()
+                continue
         return dataframe_category
 
     ###############################product dataframe######################################################################
     def get_product(self):
         dict_current = dict()
         dict_category_number = self.format_category_id()
-        dataframe_product = pd.DataFrame(columns=['product_id', 'product_name', 'category_id'])
+        dataframe_product_category = pd.DataFrame(columns=['product_id', 'product_name', 'category_id'])
         for row_index in range(len(self.dataframe_product)):
             dict_current['product_id'] = self.dataframe_product['Produkt_ID'][row_index]
             dict_current['product_name'] = self.dataframe_product['Produkt_Name'][row_index]
@@ -95,10 +134,16 @@ class DataFormat:
                 category_id = dict_category_number[self.dataframe_product['Kategorie 3'][row_index]]
             if pd.notna(self.dataframe_product['Kategorie 4'][row_index]):
                 category_id = dict_category_number[self.dataframe_product['Kategorie 4'][row_index]]
+            if pd.notna(self.dataframe_product['Kategorie 5'][row_index]):
+                category_id = dict_category_number[self.dataframe_product['Kategorie 5'][row_index]]
+            if pd.notna(self.dataframe_product['Kategorie 6'][row_index]):
+                category_id = dict_category_number[self.dataframe_product['Kategorie 6'][row_index]]
+            if pd.notna(self.dataframe_product['Kategorie 7'][row_index]):
+                category_id = dict_category_number[self.dataframe_product['Kategorie 7'][row_index]]
             dict_current['category_id'] = category_id
-            dataframe_product = dataframe_product.append(dict_current, ignore_index=True)
+            dataframe_product_category = dataframe_product_category.append(dict_current, ignore_index=True)
             dict_current.clear()
-        return dataframe_product
+        return dataframe_product_category
 
     #####################################product url#############################################################
     def get_product_price(self):
@@ -123,7 +168,6 @@ class DataFormat:
                         dict_price['product_price'] = current_price
                         dict_price['price_date'] = current_date
                         dataframe_product_price = dataframe_product_price.append(dict_price,ignore_index=True)
-                        dict_price.clear()
             except Exception as e:
                 pass
         return dataframe_product_price
