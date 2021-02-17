@@ -9,7 +9,7 @@ class DataCleaning:
         clean_result = []
         data_result = []
         file_name = self.json_path
-        file_name_after_clean = 'Daten_Json_Clean/ProductsInfo(2001-2011).json'
+        file_name_after_clean = 'Daten_Json_Clean/(2.-last)FernseherProductsInfo.json'
         with open(file_name, mode='r') as f:
             data = json.load(f)
             for current_result in data:
@@ -33,5 +33,5 @@ class DataCleaning:
 
 
 if __name__ == '__main__':
-    dataCleaning = DataCleaning('Daten_Json(09.Nov-11.Nov)/AllProductCategoryHtmlDropDuplicates(2001-2011)ToProductsInfo.json')
+    dataCleaning = DataCleaning('Daten_Json(06.Feb)/(2.-last)FernseherToProductsInfo.json')
     dataCleaning.drop_abnormal_data()

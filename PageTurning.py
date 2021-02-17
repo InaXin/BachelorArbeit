@@ -24,17 +24,17 @@ class PageTurning:
 
             # product info from second page to last page
             # for index in range(current_last_page-1):
-            for index in range(current_last_page_nummer-1):  ### second page to last page
-                change_str = 'I16-' + str(15 * (index + 1))
+            for index in range(current_last_page_nummer-1):  #second to last page
+                change_str = 'I16-' + str(15 * (index+1))
                 str_list = list(current_html)
                 str_list.insert(-5, change_str)
                 new_html = ''.join(str_list)
                 list_new_html.append(new_html)
 
         df = pd.DataFrame(list_new_html, columns=['ProductCategory'])
-        df.to_excel("Daten_Html(Second-LastPage)/(2.-last)AllProductCategoryHtmlDropDuplicates(1-100).xlsx", index=False)
+        df.to_excel("Daten_Html(second-LastPAge)/(2.-last)Handys&Smartphones.xlsx", index=False)
 
 
 if __name__ == '__main__':
-    pageTurning = PageTurning('Daten_Html/AllProductCategoryHtmlDropDuplicates(1-100).xlsx')
+    pageTurning = PageTurning('Daten_Html/Handys&Smartphones.xlsx')
     pageTurning.pageTurning()

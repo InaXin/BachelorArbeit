@@ -40,5 +40,5 @@ class DataChecking:
 
 if __name__ == '__main__':
     #dataChecking = DataChecking('Daten_Json(09.Nov-11.Nov)/AllProductCategoryHtmlDropDuplicates(1901-2000)ToProductsInfo.json')
-    dataChecking = DataChecking('Daten_Json_Clean/ProductsInfo(401-500).json')
+    dataChecking = DataChecking('Daten_Json(06.Feb)/(2.-last)Handys&SmartphonesToProductsInfo.json')
     dataChecking.maxLenProduct()

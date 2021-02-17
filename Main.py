@@ -2,38 +2,46 @@ import LstmModel
 import DatenPlotModel
 from LstmModel import *
 from DatenPlotModel import *
-from ProphetModel import *
+from FacebookProphetModel import *
 from DataFormat import *
 from DatabaseProcessor import *
 
-######connect database
+#======================================connect database=================================================================
 databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
-######plot the trend of all products
-result_all_products = databaseProcessor.get_average_price_all_date()
-#print(result_all_products[0],result_all_products[1])
-#DatenPlotModel.plot_all_products(result_all_products[0],result_all_products[1])
 
-######plot the trend of different Category in one graph
-result_top_categories = databaseProcessor.get_top_category()
-#DatenPlotModel.plot_all_categories(result_top_categories)
+#=================================================Retrieve data from the database=======================================
+#result_toilettenartikel = databaseProcessor.get_average_price_toilettenartikel()
 
-######plot the trend of each category
-for key,value in result_top_categories.items():
-    result = databaseProcessor.get_average_eachCategory(key)
-    DatenPlotModel.plot_each_category(result[0], result[1],value)
+#result_desinfektionsmittel = databaseProcessor.get_average_price_desinfektionsmittel()
 
-######plot the prediction of all products using LSTM
-dict_price = {"date":result_all_products[0],"avg_price":result_all_products[1]}
-#LstmModel.price_prediction_LSTM(dict_price, 'Alle Produkte')
+#result_handys = databaseProcessor.get_average_price_handys()
 
-######plot the prediction of all products using Prophet
-#ProphetModel.prediction_all_products(result_all_products[0],result_all_products[1])
+#================================================Plot the price changes=================================================
+#toilettenartikel
+#DatenPlotModel.plot_toilettenartikel(result_toilettenartikel[0],result_toilettenartikel[1])
 
-######plot the prediction of each category using Prophet
-for key,value in result_top_categories.items():
-    result = databaseProcessor.get_average_eachCategory(key)
-    #ProphetModel.prediction_each_category(result[0],result[1],value)
+#Desinfektionsmittel
+#DatenPlotModel.plot_desinfektionsmittel(result_desinfektionsmittel[0],result_desinfektionsmittel[1])
 
+#Handys
+#DatenPlotModel.plot_handys(result_handys[0],result_handys[1])
+
+#================================================Plot the Prediction using LSTM=========================================
+######toilettenartikel
+# dict_price = {"date":result_toilettenartikel[0],"avg_price":result_toilettenartikel[1]}
+# LstmModel.prediction_LSTM(dict_price, 'Toilettenartikel')
+
+#===================================================Plot the analyse and prediction using Prophet=======================
+######Toilettenartikel
+#ProphetModel.prediction_prophet(result_toilettenartikel[0],result_toilettenartikel[1])
+
+######Desinfektionsmittel
+#ProphetModel.prediction_prophet(result_desinfektionsmittel[0],result_desinfektionsmittel[1])
+
+######Handys&Smartphones
+#ProphetModel.prediction_prophet(result_handys[0],result_handys[1])
+
+###database close
 databaseProcessor.close()
 
 

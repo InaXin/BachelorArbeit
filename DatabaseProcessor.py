@@ -8,7 +8,7 @@ class DatabaseProcesser:
 
     def __init__(self,database_url,user,password,shema_name):
         self.db = pymysql.connect(database_url,user,password,shema_name)
-########################################create table Product#######################################
+#===================================create table Product================================================================
     def create_product_table(self, db):
         cursor = db.cursor()
 
@@ -21,7 +21,7 @@ class DatabaseProcesser:
                     )"""
         cursor.execute(sql)
 
-#######################################create table Product_Price####################################
+#===================================create table Product_Price==========================================================
     def create_price_table(self,db):
         cursor = db.cursor()
 
@@ -35,7 +35,7 @@ class DatabaseProcesser:
                  )"""
         cursor.execute(sql)
 
-######################################crate Table Category############################################
+#=====================================crate Table Category==============================================================
     def create_category_table(self, db):
         cursor = db.cursor()
 
@@ -48,7 +48,7 @@ class DatabaseProcesser:
                     )"""
         cursor.execute(sql)
 
-################################# insert price and date for one row###########################################################
+#==================================== insert price and date for one row=================================================
     def insert_price(self,dict_price):
         product_id = dict_price['product_id']
         product_price = dict_price['product_price']
@@ -64,7 +64,7 @@ class DatabaseProcesser:
             print('##############ProductProcesser.insert_price(self,dict_price)##############')
             self.db.rollback()
 
-################################# insert price and date for all rows###########################################################
+#========================================== insert price and date for all rows==========================================
     def insert_all_prices(self,dataframe_product_price):
         dict_price = dict()
         for i in range(len(dataframe_product_price)):
@@ -74,7 +74,7 @@ class DatabaseProcesser:
             dict_price['price_date'] = dataframe_product_price['price_date'][i]
             self.insert_price(dict_price)
 
-###################################insert category#################################################################
+#==============================================insert category==========================================================
     def insert_category(self,dataframe_category):
         for row_index in range(len(dataframe_category)):
             category_id = dataframe_category['category_id'][row_index]
@@ -88,12 +88,12 @@ class DatabaseProcesser:
                 cursor.execute(sql)
                 self.db.commit()
             except Exception as e:
-                print('##############ProductProcesser.insert_category(self,dataframe_category)################################')
+                print('##############ProductProcesser.insert_category(self,dataframe_category)########################')
                 print(e)
-                print('##############ProductProcesser.insert_category(self,dataframe_category)################################')
+                print('##############ProductProcesser.insert_category(self,dataframe_category)########################')
                 self.db.rollback()
 
-#########################################insert product########################################################
+#===========================================insert product==============================================================
     def insert_product(self,dataframe_product_category):
         for row_index in range(len(dataframe_product_category)):
             product_id = dataframe_product_category['product_id'][row_index]
@@ -114,7 +114,7 @@ class DatabaseProcesser:
                 print('#################ProductProcessor.insert_product(self,dataframe_product_category)#############')
                 self.db.rollback()
 
-#######################################max_category_id################################################
+#===========================================max_category_id=============================================================
     def get_max_category_id(self):
         current_result = 0
         cursor = self.db.cursor()
@@ -130,7 +130,7 @@ class DatabaseProcesser:
         if current_result == None:
             current_result = 0
         return current_result
-#######################################category_id by category_name################################################
+#============================================category_id by category_name===============================================
     def get_category_id(self,category_name):
         current_result = -1
         cursor = self.db.cursor()
@@ -146,7 +146,7 @@ class DatabaseProcesser:
 
         return current_result
 
-#######################################average price by product################################################
+#============================================average price by product===================================================
     def get_average_price_byProduct(self,productID):
         cursor = self.db.cursor()
 
@@ -161,7 +161,7 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
-#####################################average price by date#####################################################
+#=============================================average price by date=====================================================
     def get_average_price_byDate(self,priceDate):
         cursor = self.db.cursor()
 
@@ -176,12 +176,14 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
-#######################################average price by all date after data cleaning#############################################
+#============================================average price by all date after data cleaning==============================
     def get_average_price_all_date(self):
         cursor = self.db.cursor()
 
-        sql = """select avg(product_price),price_date from Product_Price where product_id in (select product_id from Product_Price group by product_id 
-                 having count(distinct(price_date))=(select count(distinct(price_date)) from Product_Price)) group by price_date"""
+        sql = """select avg(product_price),price_date from Product_Price where product_id in 
+                 (select product_id from Product_Price group by product_id 
+                 having count(distinct(price_date))=(select count(distinct(price_date)) from Product_Price))
+                 group by price_date"""
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
@@ -196,13 +198,73 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
- ####################################### average price by Date accroding each category####################################
+#==========================average price of Toilettenartikel by date(from 2020-02-06 to 2021-02-04)=====================
+    def get_average_price_toilettenartikel(self):
+        cursor = self.db.cursor()
+
+        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-06' and price_date <= '2021-02-04') 
+                 And product_id in (select product_id from Product where category_id in 
+                 (select category_id from Category where category_name = "Toilettenartikel")) 
+                 group by price_date"""
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            avg_price_all_date = []
+            date_all_date = []
+            for row in results:
+                avg_price_all_date.append(row[0])
+                date_all_date.append(row[1])
+            return date_all_date, avg_price_all_date
+        except:
+            print("Error: unable to fetch data")
+
+#========================average price of Desinfektionsmittel by date(from 2020-02-07 to 2020-02-06)====================
+    def get_average_price_desinfektionsmittel(self):
+        cursor = self.db.cursor()
+
+        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-07' and price_date <= '2021-2-06') 
+                 And product_id in (select product_id from Product where category_id in 
+                 (select category_id from Category where category_name = "Desinfektionsmittel")) 
+                 group by price_date"""
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            avg_price_all_date = []
+            date_all_date = []
+            for row in results:
+                avg_price_all_date.append(row[0])
+                date_all_date.append(row[1])
+            return date_all_date, avg_price_all_date
+        except:
+            print("Error: unable to fetch data")
+
+#==========================average price of Handys by date(from 2020-02-11 to 2020-02-06)===============================
+    def get_average_price_handys(self):
+        cursor = self.db.cursor()
+
+        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-11' and price_date <= '2021-02-06') 
+                 And product_id in (select product_id from Product where category_id in 
+                 (select category_id from Category where category_name = "Handys & Smartphones")) 
+                 group by price_date"""
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            avg_price_all_date = []
+            date_all_date = []
+            for row in results:
+                avg_price_all_date.append(row[0])
+                date_all_date.append(row[1])
+            return date_all_date, avg_price_all_date
+        except:
+            print("Error: unable to fetch data")
+
+ #===========================average price by Date accroding each category==============================================
     def get_average_eachCategory(self, categoryId):
         cursor = self.db.cursor()
 
-        sql = """select avg(product_price),price_date from product_price_clean where product_id in 
+        sql = """select avg(product_price),price_date from Product_Price where product_id in 
                  (select product_id from Product where category_id in 
-                 (SELECT category_id FROM category WHERE FIND_IN_SET(category_id, getChild(%s))AND category_id != %s )) 
+                 (select category_id from category where FIND_IN_SET(category_id, getChild(%s))AND category_id != %s )) 
                  group by price_date""" % (categoryId,categoryId)
         try:
             cursor.execute(sql)
@@ -212,13 +274,14 @@ class DatabaseProcesser:
             for row in results:
                 avg_price_eachCategory.append(row[0])
                 date_Date.append(row[1])
-                #print("avg_price_eachCategory", avg_price_eachCategory)
-                #print("date_Date", date_Date)
+                print("avg_price_eachCategory", avg_price_eachCategory)
+                print("date_Date", date_Date)
             return date_Date, avg_price_eachCategory
         except:
             print("Error: unable to fetch data")
 
-########################################all top categories########################################################
+
+#==========================all top categories===========================================================================
     def get_top_category(self):
         cursor = self.db.cursor()
 
@@ -234,7 +297,7 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
-################################each product price############################################
+#========================each product price=============================================================================
     def get_product_price(self,productID):
         cursor = self.db.cursor()
         sql = """ select price_date,product_price from Product_Price where product_id = %s""" % str(productID)
@@ -251,41 +314,44 @@ class DatabaseProcesser:
             return product_date,product_price
         except:
             print("Error: unable to fetch data")
+
+#========================close==========================================================================================
     def close(self):
         self.db.close()
 
-########################################main()####################################################################
+#============================main()=====================================================================================
 if __name__ == "__main__":
     databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
-    dataFormat = DataFormat('Daten/Json(ProductsInfo(201-300))ToExcel(6).xlsx')
+    dataFormat = DataFormat('Daten/Json((2.-last)Handys&SmartphonesProductsInfo)ToExcel(1).xlsx')
 
+    #Dataformat
     datarame_category = dataFormat.get_category()
     dataframe_product_category = dataFormat.get_product()
     dataframe_product_price = dataFormat.get_product_price()
 
-######################insert price in mysql############################
-    databaseProcessor.insert_all_prices(dataframe_product_price)
+    #============insert price in mysql===============
+    #databaseProcessor.insert_all_prices(dataframe_product_price)
 
-#################insert category in mysql##############################
-   # databaseProcessor.insert_category(datarame_category)
+    #============insert category in mysql=============
+    #databaseProcessor.insert_category(datarame_category)
 
-#####################insert product in mysql##########################
-   # databaseProcessor.insert_product(dataframe_product_category)
+    #=============insert product in mysql==============
+    #databaseProcessor.insert_product(dataframe_product_category)
 
-    ############get_average_price_byDate(self,priceDate)##############
+    #=============get_average_price_byDate(self,priceDate)=======
     #databaseProcessor.get_average_price_byDate("\'" + '2020-01-20' + "\'")
 
-    ############get_average_price_allDate(self)#######################
+    #=============get_average_price_allDate(self)================
     #databaseProcessor.get_average_price_all_date()
 
-    ############get_average_eachCategory(self, categoryId)##############
-    #databaseProcessor.get_average_eachCategory(4)
+    #==============get_average_eachCategory(self, categoryId)========
+    #databaseProcessor.get_average_eachCategory(91)
 
-    #############get_top_category(self)##########################
+    #===============get_top_category(self)===========================
     #databaseProcessor.get_top_category()
 
-    ########################get_product_price(self,productID)#############
+    #================get_product_price(self,productID)===============
     #databaseProcessor.get_product_price('6509891')
 
-    ############database close##################################
-    databaseProcessor.close()
+    #================database close==================================
+    #databaseProcessor.close()

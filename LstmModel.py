@@ -6,7 +6,7 @@ import os.path
 
 class LstmModel:
 
-    def price_prediction_LSTM(dict_price,name):
+    def prediction_LSTM(dict_price,name):
         dataframe_avg_price = pd.DataFrame(dict_price)
         #print("dataframe_avg_price",dataframe_avg_price)
         data_training = dataframe_avg_price[dataframe_avg_price['date']< pd.to_datetime('2020-7-01') ].copy()
@@ -31,7 +31,7 @@ class LstmModel:
         X_train,y_train = np.array(X_train),np.array(y_train)
         print("X_train",X_train.shape[1],"y_train",y_train.shape)
 
-        ########prepare test dataset############
+        ###prepare test dataset
         past_60_days = data_training.tail(60)
         print("past_days",past_60_days)
         df = past_60_days.append(data_test,ignore_index = True)
@@ -46,7 +46,7 @@ class LstmModel:
 
         X_test,y_test = np.array(X_test),np.array(y_test)
 
-        #########Building LSTM########################
+        ###Building LSTM
         from tensorflow.keras import Sequential
         from tensorflow.keras.layers import Dense,LSTM,Dropout
 
@@ -69,9 +69,9 @@ class LstmModel:
         model.summary()
 
         model.compile(optimizer = 'Adam', loss = 'mean_squared_error')
-        model.fit(X_train,y_train,epochs=200,batch_size=32) ######training is done##################
+        model.fit(X_train,y_train,epochs=500,batch_size=32) ###training is done
 
-        ########################save model###################
+        ####save model
         if os.path.isfile('models/%s_model.h5'%name) is False:
             model.save('models/%s_model.h5'%name)
 
@@ -89,7 +89,7 @@ class LstmModel:
         train_pred = train_pred.reshape(train_pred.shape[0])
 
 
-        ####visualising the results
+        ###visualising the results
         trainPredictPlot = [None]*len(dataframe_avg_price['avg_price'])
         trainPredictPlot[60:len(train_pred)+60] = train_pred
         testPredictPlot = [None]*len(dataframe_avg_price['avg_price'])
@@ -100,10 +100,8 @@ class LstmModel:
         plt.plot(trainPredictPlot,color= 'green',label = 'train_predict')
         plt.plot(testPredictPlot,color = 'red',label='test_predict')
 
-        # plt.plot(test_pred,color= 'green',label = 'predict')
-        # plt.plot(y_test,color = 'red',label='real')
 
-        plt.title('Vorhersage von durchschnitlicher Preisentwicklung(%s)'%name)
+        plt.title('Vorhersage von durchschnitlicher Preisentwicklung (%s)'%name)
         plt.xlabel('Zeit')
         plt.ylabel('durchschnittliche Preise (€)')
         plt.legend()

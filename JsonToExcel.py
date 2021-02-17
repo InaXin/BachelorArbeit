@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-json_path = 'Daten_Json_Clean/ProductsInfo(2001-2011).json'
+json_path = 'Daten_Json_Clean/(2.-last)Handys&SmartphonesProductsInfo.json'
 
 with open(json_path) as f:
     data = json.load(f)

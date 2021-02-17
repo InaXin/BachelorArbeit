@@ -6,69 +6,49 @@ import DatabaseProcessor
 
 class DatenPlotModel:
 
-    #############function for plotting the trend of all products##########################################
-    def plot_all_products(x,y):
-        fig = plt.figure(figsize=(12,6))
-        plt.plot(x,y)
-        plt.vlines(pd.to_datetime('2020-01-27'), min(y), max(y), colors="r", linestyles="-.",linewidth=3,
-                   label = "Erste Erkrankung in Deutschland(27.01.20)")
-        plt.vlines(pd.to_datetime('2020-03-22'), min(y), max(y), colors="g", linestyles="-.",linewidth=3,
-                   label= "Lock Down(22.03.20)"),
-        plt.vlines(pd.to_datetime('2020-04-20'), min(y), max(y), colors="b", linestyles="-.",linewidth=3,
-                   label= "Erste Lockerung(20.04.20)")
-        plt.vlines(pd.to_datetime('2020-10-13'),min(y),max(y),colors= "c", linestyles="-.",linewidth = 3,
-                   label= "Amazon Prime Day")
-
-        plt.title("Durchschnittliche Preisentwicklung von allen Produkten(von Okt. 2019 bis Okt. 2020)",fontsize=16)
-        plt.xlabel("Datum")
-        plt.ylabel("durchschnittliche Produktpreise (€)")
-
-        plt.legend()
-        plt.grid()
-        plt.tight_layout()
-        fig.savefig('image/AllProducts.svg')
-        plt.show()
-
-    ###################function for plotting the trend of each Category #####################################
-    def plot_each_category(x, y, categoryName):
+    #===========================Toilettenartikel plotting===============================================================
+    def plot_toilettenartikel(x,y):
         fig = plt.figure(figsize=(12, 6))
-        plt.plot(x, y)
-
-        plt.vlines(pd.to_datetime('2020-01-27'), min(y), max(y), colors="r", linestyles="-.",
-                       linewidth=3,
-                       label="Erste Erkrankung in Deutschland(27.01.20)")
-        plt.vlines(pd.to_datetime('2020-03-22'), min(y), max(y), colors="g", linestyles="-.",
-                       linewidth=3,
-                       label="Lock Down(22.03.20)"),
-        plt.vlines(pd.to_datetime('2020-04-20'), min(y), max(y), colors="b", linestyles="-.",
-                       linewidth=3,
-                       label="Erste Lockerung(20.04.20)")
-        plt.vlines(pd.to_datetime('2020-10-13'), min(y), max(y), colors="c", linestyles="-.", linewidth=3,
-                       label="Amazon Prime Day")
-
-        plt.title('%s(von Okt. 2019 bis Okt. 2020)'%categoryName, fontsize=15)
+        plt.plot(x, y, marker = 'x')
+        plt.title("Durchschnittliche Preisentwicklung von Kategorie 'Toilettenartikel'", fontsize=16)
         plt.xlabel("Datum")
         plt.ylabel("durchschnittliche Produktpreise (€)")
-        plt.legend()
         plt.grid()
         plt.tight_layout()
-        fig.savefig("image/%s.svg"%categoryName)
+        fig.savefig('image/Toilettenartikel_Preisentwicklung.svg')
+        plt.show()
+    #===========================Desinfektionsmittel plotting============================================================
+
+    def plot_desinfektionsmittel(x, y):
+        fig = plt.figure(figsize=(12, 6))
+        plt.plot(x, y, marker='x')
+        plt.title("Durchschnittliche Preisentwicklung von Kategorie 'Desinfektionsmittel'", fontsize=16)
+        plt.xlabel("Datum")
+        plt.ylabel("durchschnittliche Produktpreise (€)")
+        plt.grid()
+        plt.tight_layout()
+        fig.savefig('image/Desinfektionsmittel_Preisentwicklung.svg')
         plt.show()
 
-    ###################function for plotting the trend of different Category in one graph#####################################
-    def plot_all_categories(dict_top_category):
-       databaseProcessor = DatabaseProcessor.DatabaseProcesser()
-       databaseProcessor.db = pymysql.connect("localhost", "root", "6857", "IdealoPreis")
-       fig = plt.figure(figsize=(12,6))
-       for key,value in dict_top_category.items():
-          x,y = databaseProcessor.get_average_eachCategory(key)
-          plt.plot(x,y,label = value)
-       plt.title("Durchschnittliche Preisentwicklung nach Kategorien(von Okt. 2019 bis Okt. 2020)", fontsize=15)
-       plt.xlabel("Datum")
-       plt.ylabel("durchschnittliche Produktpreise (€)")
+    #===========================Handys plotting=========================================================================
 
-       plt.legend()
-       plt.grid()
-       plt.tight_layout()
-       fig.savefig('image/Categories.svg')
-       plt.show()
+    def plot_handys(x, y):
+        fig = plt.figure(figsize=(12, 6))
+        plt.plot(x, y, marker='x')
+        plt.title("Durchschnittliche Preisentwicklung von Handys", fontsize=16)
+        plt.xlabel("Datum")
+        plt.ylabel("durchschnittliche Produktpreise (€)")
+        plt.grid()
+        plt.tight_layout()
+        fig.savefig('image/Handys_Preisentwicklung.svg')
+        plt.show()
+
+
+
+
+
+
+
+
+
+

@@ -11,7 +11,7 @@ class DataFormat:
         self.dataframe_product = self.excel_file.parse(self.excel_file.sheet_names[0])
         self.dict_category_number = self.format_category_id()
 
-    ###################all category number########################################################################
+    #=======================all category number=========================================================================
     def format_category_id(self):
         databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
         max_category_id = databaseProcessor.get_max_category_id()
@@ -62,7 +62,7 @@ class DataFormat:
         databaseProcessor.close()
         return dict_category_number
 
-    ##################category dataframe###########################################################################
+    #==========================category dataframe=======================================================================
     def get_category(self):
         dataframe_category = pd.DataFrame(columns=['category_id', 'category_name', 'super_category_id'])
         dict_current = dict()
@@ -117,7 +117,7 @@ class DataFormat:
                 continue
         return dataframe_category
 
-    ###############################product dataframe######################################################################
+    #==============================product dataframe====================================================================
     def get_product(self):
         dict_current = dict()
         dict_category_number = self.format_category_id()
@@ -145,7 +145,7 @@ class DataFormat:
             dict_current.clear()
         return dataframe_product_category
 
-    #####################################product url#############################################################
+    #=========================product url===============================================================================
     def get_product_price(self):
         dataframe_product_price = pd.DataFrame(columns=['product_id','product_price','price_date'])
         dict_price = dict()

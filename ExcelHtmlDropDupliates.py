@@ -1,6 +1,6 @@
 import pandas as pd
 
-#for excel only one culumn
+###for excel only one culumn
 def excel_drop_duplicates(excel_path:str, culumn_name:str):
     excel_html = pd.ExcelFile(excel_path)
     dataframe_html = excel_html.parse(excel_html.sheet_names[0])
