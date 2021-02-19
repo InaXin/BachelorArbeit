@@ -14,11 +14,12 @@ class DatabaseProcesser:
 
         cursor.execute("drop table if exists Product")
 
-        sql = """ create table Product(
-                    product_id varchar(30) primary key,
-                    product_name varchar(255) unique,
-                    category_id varchar (30)
-                    )"""
+        sql = """ create table Product (
+                  product_id varchar(255) ,
+                  product_name varchar(255),
+                  category_id varchar(255),
+                  primary key(product_id,category_id)
+                )"""
         cursor.execute(sql)
 
 #===================================create table Product_Price==========================================================
@@ -28,11 +29,11 @@ class DatabaseProcesser:
         cursor.execute("drop table if exists Product_Price")
 
         sql = """ create table Product_Price(
-                 product_id varchar(30),
-                 product_price double,
-                 price_date date,
-                 primary key(product_id,price_date)
-                 )"""
+                  product_id varchar(255),
+                  product_price double,
+                  price_date date,
+                  primary key(product_id,price_date)
+                )"""
         cursor.execute(sql)
 
 #=====================================crate Table Category==============================================================
@@ -42,10 +43,10 @@ class DatabaseProcesser:
         cursor.execute("drop table if exists Category")
 
         sql = """ create table Category(
-                    category_id varchar(30) primary key,
-                    category_name varchar(255),
-                    super_category_id varchar (30)
-                    )"""
+                  category_id varchar(255) primary key,
+                  category_name varchar(255),
+                  super_category_id varchar(255)
+                  )"""
         cursor.execute(sql)
 
 #==================================== insert price and date for one row=================================================
