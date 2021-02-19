@@ -316,7 +316,7 @@ class DatabaseProcesser:
                 category_name.append(row[1])
             dict_category_id_name = {"Kategorie-Name":category_name,"Kategorie-ID(in Datenbank)":category_id}
             df_category_id_name = pd.DataFrame(dict_category_id_name)
-            df_category_id_name.to_excel('CategoryList.xlsx',index = False)
+            df_category_id_name.to_excel('CategoryListForTest.xlsx',index = False)
         except:
             print("Error: unable to fetch data")
 
