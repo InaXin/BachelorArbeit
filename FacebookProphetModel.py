@@ -66,55 +66,71 @@ class ProphetModel:
                                    Preisänderung_in_black_friday,
                                    Preisänderung_in_singles_day))
 
+        coronaAndWerbeaktion = pd.concat((Preisänderung_in_einer_Woche_ab_Ankündigung_von_erstem_Lockdown,
+                                       Preisänderung_in_einer_Woche_ab_Aufhebung_von_erstem_Lockdown,
+                                       Preisänderung_in_einer_Woche_Ankündigung_Teil_Lockdown,
+                                       Preisänderung_in_amazon_prime_day,
+                                       Preisänderung_in_black_friday,
+                                       Preisänderung_in_singles_day
+                                       ))
+
+        # =================================einstellbare Parameter=========================================
         ###Model fit
-        m = Prophet(weekly_seasonality = True)
-        m.add_seasonality(name='monthly', period=30.5, fourier_order=5)
+        m = Prophet(holidays= corona, weekly_seasonality = False)
+        #m.add_seasonality(name='monthly', period=30.5, fourier_order=5)
         m.add_seasonality(name='yearly', period=365.25, fourier_order=10)
         # m.add_seasonality(name ='quarterly', period=365.25/4, fourier_order = 5)
+        # gesetztliche Feiertage
+        m.add_country_holidays(country_name='DE')
+        # =================================einstellbare Parameter=========================================
 
-        #m.add_country_holidays(country_name='DE')
 
         m.fit(dataframe_avg_price)
 
         ###Predict
-        future = m.make_future_dataframe(periods=0)
+        future = m.make_future_dataframe(periods=365)
         #print("future", future.tail())
 
         forecast = m.predict(future)
         #forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
 
         ###Plot results
-        #fig1 = m.plot(forecast)
-        #fig1.savefig('image/Handys_Prognose.svg')
+        m.plot(forecast)
 
-        fig2 = m.plot_components(forecast)
-        fig2.savefig('image/Handys_TrendUndSaisonalität.svg')
+        m.plot_components(forecast)
+
 
         ###corona
-        # fig3 = plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Ankündigung_von_erstem_Lockdown')
-        # fig3 = plt.gcf()
-        # fig3.savefig('image/Desinfektionsmittel_Preisänderung_in_erstem_Lockdown.svg')
-        #
-        # fig4 = plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Aufhebung_von_erstem_Lockdown')
-        # fig4 = plt.gcf()
-        # fig4.savefig('image/Desinfektionsmittel_Preisänderung_ab_Aufhebung_erstes_Lockdowns.svg')
-        #
-        # fig5 = plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_Ankündigung_Teil_Lockdown')
-        # fig5 = plt.gcf()
-        # fig5.savefig('image/Desinfektionsmittel_Preisänderung_in_Teil_Lockdown.svg')
+        plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Ankündigung_von_erstem_Lockdown')
 
-        ###werbeaktion
-        # fig6 = plot_forecast_component(m, forecast, 'Preisänderung_in_black_friday')
-        # fig6 = plt.gcf()
-        # fig6.savefig('image/Handys_Black_Friday.svg')
+        plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Aufhebung_von_erstem_Lockdown')
+
+        plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_Ankündigung_Teil_Lockdown')
+
+
+
+        # ###werbeaktion
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_black_friday')
         #
-        # fig7 = plot_forecast_component(m, forecast, 'Preisänderung_in_amazon_prime_day')
-        # fig7 = plt.gcf()
-        # fig7.savefig('image/Handys_Amazon_Prime_Day.svg')
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_amazon_prime_day')
         #
-        # fig8 = plot_forecast_component(m, forecast, 'Preisänderung_in_singles_day')
-        # fig8 = plt.gcf()
-        # fig8.savefig('image/Handys_Singles_Day.svg')
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_singles_day')
+
+
+
+        # ###coronaAndWerbeaktion
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Ankündigung_von_erstem_Lockdown')
+        #
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_ab_Aufhebung_von_erstem_Lockdown')
+        #
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_einer_Woche_Ankündigung_Teil_Lockdown')
+        #
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_black_friday')
+        #
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_amazon_prime_day')
+        #
+        # plot_forecast_component(m, forecast, 'Preisänderung_in_singles_day')
+
 
         plt.show()
 

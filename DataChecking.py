@@ -39,6 +39,6 @@ class DataChecking:
             return max_len
 
 if __name__ == '__main__':
-    #dataChecking = DataChecking('Daten_Json(09.Nov-11.Nov)/AllProductCategoryHtmlDropDuplicates(1901-2000)ToProductsInfo.json')
+    # dataChecking = DataChecking('Daten_Json/AllProductCategoryHtmlDropDuplicates(1901-2000)ToProductsInfo.json')
     dataChecking = DataChecking('Daten_Json(06.Feb)/(2.-last)Handys&SmartphonesToProductsInfo.json')
     dataChecking.maxLenProduct()

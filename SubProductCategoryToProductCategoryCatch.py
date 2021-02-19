@@ -42,7 +42,7 @@ dataframe_html = excel_html.parse(excel_html.sheet_names[0])
 for current_html in dataframe_html['SubProductCategory']:
     result_list_html = get_productCategory(current_html)
     df = pd.DataFrame(result_list_html,columns=['ProductCategory'])
-    df.to_excel("SubProductCategoryToProductCategoryHtml(61-70).xlsx",index= False)
+    df.to_excel("Daten_Html/SubProductCategory(61-70)ToProductCategoryHtml.xlsx",index= False)
 
 
 

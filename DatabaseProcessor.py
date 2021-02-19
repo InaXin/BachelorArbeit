@@ -199,14 +199,14 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
-#==========================average price of Toilettenartikel by date(from 2020-02-06 to 2021-02-04)=====================
-    def get_average_price_toilettenartikel(self):
+# ==========================average price by category over time =====================
+    def get_average_price_byCategory_overTime(self,categoryName:str,start_date:str,end_date:str):
         cursor = self.db.cursor()
 
-        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-06' and price_date <= '2021-02-04') 
-                 And product_id in (select product_id from Product where category_id in 
-                 (select category_id from Category where category_name = "Toilettenartikel")) 
-                 group by price_date"""
+        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '%s' and price_date <= '%s') 
+                   And product_id in (select product_id from Product where category_id in 
+                   (select category_id from Category where category_name = '%s')) 
+                   group by price_date order by price_date"""%(start_date,end_date,categoryName)
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
@@ -216,17 +216,19 @@ class DatabaseProcesser:
                 avg_price_all_date.append(row[0])
                 date_all_date.append(row[1])
             return date_all_date, avg_price_all_date
-        except:
-            print("Error: unable to fetch data")
+        except Exception as e:
+            print('##############ProductProcesser.get_average_price_byCategory_overTime(self,categoryName:str,price_date1:str,price_date2:str)########################')
+            print(e)
+            print('##############ProductProcesser.get_average_price_byCategory_overTime(self,categoryName:str,price_date1:str,price_date2:str)########################')
 
-#========================average price of Desinfektionsmittel by date(from 2020-02-07 to 2020-02-06)====================
-    def get_average_price_desinfektionsmittel(self):
+# ==========================average price by category=====================
+    def get_average_price_byCategory(self, categoryName):
         cursor = self.db.cursor()
 
-        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-07' and price_date <= '2021-2-06') 
-                 And product_id in (select product_id from Product where category_id in 
-                 (select category_id from Category where category_name = "Desinfektionsmittel")) 
-                 group by price_date"""
+        sql = """select avg(product_price),price_date from Product_Price where 
+                   product_id in (select product_id from Product where category_id in 
+                   (select category_id from Category where category_name = '%s')) 
+                   group by price_date order by price_date""" % categoryName
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
@@ -236,37 +238,21 @@ class DatabaseProcesser:
                 avg_price_all_date.append(row[0])
                 date_all_date.append(row[1])
             return date_all_date, avg_price_all_date
-        except:
-            print("Error: unable to fetch data")
+        except Exception as e:
+            print(
+                '##############ProductProcesser.get_average_price_byCategory(self, categoryName)########################')
+            print(e)
+            print(
+                '##############ProductProcesser.get_average_price_byCategory(self, categoryName)########################')
 
-#==========================average price of Handys by date(from 2020-02-11 to 2020-02-06)===============================
-    def get_average_price_handys(self):
-        cursor = self.db.cursor()
-
-        sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '2020-02-11' and price_date <= '2021-02-06') 
-                 And product_id in (select product_id from Product where category_id in 
-                 (select category_id from Category where category_name = "Handys & Smartphones")) 
-                 group by price_date"""
-        try:
-            cursor.execute(sql)
-            results = cursor.fetchall()
-            avg_price_all_date = []
-            date_all_date = []
-            for row in results:
-                avg_price_all_date.append(row[0])
-                date_all_date.append(row[1])
-            return date_all_date, avg_price_all_date
-        except:
-            print("Error: unable to fetch data")
-
- #===========================average price by Date accroding each category==============================================
+    #===========================average price by Date accroding each category==============================================
     def get_average_eachCategory(self, categoryId):
         cursor = self.db.cursor()
 
         sql = """select avg(product_price),price_date from Product_Price where product_id in 
                  (select product_id from Product where category_id in 
                  (select category_id from category where FIND_IN_SET(category_id, getChild(%s))AND category_id != %s )) 
-                 group by price_date""" % (categoryId,categoryId)
+                 group by price_date order by price_date""" % (categoryId,categoryId)
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
@@ -316,6 +302,25 @@ class DatabaseProcesser:
         except:
             print("Error: unable to fetch data")
 
+# ========================all Category in Product Table=================================================================
+    def get_all_category_from_productTable(self):
+        cursor = self.db.cursor()
+        sql = """select distinct category_id,category_name from Product natural join Category order by category_name"""
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            category_id = []
+            category_name = []
+            for row in results:
+                category_id.append(row[0])
+                category_name.append(row[1])
+            dict_category_id_name = {"Kategorie-Name":category_name,"Kategorie-ID(in Datenbank)":category_id}
+            df_category_id_name = pd.DataFrame(dict_category_id_name)
+            df_category_id_name.to_excel('CategoryList.xlsx',index = False)
+        except:
+            print("Error: unable to fetch data")
+
+
 #========================close==========================================================================================
     def close(self):
         self.db.close()
@@ -323,12 +328,12 @@ class DatabaseProcesser:
 #============================main()=====================================================================================
 if __name__ == "__main__":
     databaseProcessor = DatabaseProcesser("localhost","root","6857","IdealoPreis")
-    dataFormat = DataFormat('Daten/Json((2.-last)Handys&SmartphonesProductsInfo)ToExcel(1).xlsx')
+    #dataFormat = DataFormat('Daten/Json((2.-last)Handys&SmartphonesProductsInfo)ToExcel(1).xlsx')
 
     #Dataformat
-    datarame_category = dataFormat.get_category()
-    dataframe_product_category = dataFormat.get_product()
-    dataframe_product_price = dataFormat.get_product_price()
+    #datarame_category = dataFormat.get_category()
+    #dataframe_product_category = dataFormat.get_product()
+    #dataframe_product_price = dataFormat.get_product_price()
 
     #============insert price in mysql===============
     #databaseProcessor.insert_all_prices(dataframe_product_price)
@@ -353,6 +358,7 @@ if __name__ == "__main__":
 
     #================get_product_price(self,productID)===============
     #databaseProcessor.get_product_price('6509891')
+    databaseProcessor.get_all_category_from_productTable()
 
     #================database close==================================
     #databaseProcessor.close()

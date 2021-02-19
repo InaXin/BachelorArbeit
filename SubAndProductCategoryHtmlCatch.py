@@ -67,4 +67,4 @@ chrome_driver.quit()
 
 df = pd.DataFrame(list_html, columns=['ProductCategory'])
 
-df.to_excel("TestIdealoProductCategoryHtml.xlsx", index=False)
+df.to_excel("Daten_Html/IdealoProductCategoryHtml.xlsx", index=False)

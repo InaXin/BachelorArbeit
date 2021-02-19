@@ -69,7 +69,7 @@ class LstmModel:
         model.summary()
 
         model.compile(optimizer = 'Adam', loss = 'mean_squared_error')
-        model.fit(X_train,y_train,epochs=500,batch_size=32) ###training is done
+        model.fit(X_train,y_train,epochs=200,batch_size=32) ###training is done
 
         ####save model
         if os.path.isfile('models/%s_model.h5'%name) is False:
