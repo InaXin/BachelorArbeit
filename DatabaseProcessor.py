@@ -358,6 +358,8 @@ if __name__ == "__main__":
 
     #================get_product_price(self,productID)===============
     #databaseProcessor.get_product_price('6509891')
+
+    #================get_all_category_from_productTable(self)===============
     databaseProcessor.get_all_category_from_productTable()
 
     #================database close==================================
