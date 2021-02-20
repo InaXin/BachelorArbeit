@@ -200,7 +200,7 @@ class DatabaseProcesser:
             print("Error: unable to fetch data")
 
 # ==========================average price by category over time =====================
-    def get_average_price_byCategory_overTime(self,categoryName:str,start_date:str,end_date:str):
+    def get_average_price_byCategory_period(self,categoryName:str,start_date:str,end_date:str):
         cursor = self.db.cursor()
 
         sql = """select avg(product_price),price_date from Product_Price where ( price_date>= '%s' and price_date <= '%s') 

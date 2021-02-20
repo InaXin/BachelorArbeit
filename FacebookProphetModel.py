@@ -6,7 +6,14 @@ import matplotlib.pyplot as plt
 class ProphetModel:
 
     #=================================function for plotting the predition===============================================
-    def prediction_prophet(x,y,sainsonalitaetW:bool, saisonalitaetM:bool,saisonalitaetY:bool, gesetzlicheFeiertag:bool, sondereffekt:int, predict_period:int):
+    def prediction_prophet(x,y,category_name,sainsonalitaetW:bool, saisonalitaetM:bool,saisonalitaetY:bool, gesetzlicheFeiertag:bool, sondereffekt:int, predict_period:int):
+        plt.plot(x, y, marker='x')
+        plt.title("Durchschnittliche Preisentwicklung von Kategorie '%s'" % category_name)
+        plt.xlabel("Datum")
+        plt.ylabel("durchschnittliche Produktpreise (€)")
+        plt.grid()
+        plt.tight_layout()
+
         dict_price = {"ds":x,"y":y}
         dataframe_avg_price = pd.DataFrame(dict_price)
 
