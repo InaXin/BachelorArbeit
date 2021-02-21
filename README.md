@@ -44,3 +44,17 @@ In diesem Schritt werden gewünschte Produktinformationen wie Produkt-ID, Produk
 ……
 „Daten/Json(ProductsInfo(2001-2011))ToExcel.xlsx“
 2.2.3	Run Python Datei „DatabaseProcessor.py“, um Produktinformationen und Produktpreis in Datenbank einzufügen.
+
+
+Parameter	Werte	Typ	Erklärung
+category_name	"Toilettenartikel"	str	Kategorie Name muss in der Excel-Datei “CategoyListForTest.xlsx „finden
+start_date	Z.B."2020-02-06"	date	Format muss "YYYY-MM-DD". Kann auch leer sein. Wenn die „start_date“ und „end_date“ leer sind, werden alles Datum gezeigt.
+end_date	Z.B."2021-02-04"	date	Format muss "YYYY-MM-DD" Kann auch leer sein. Wenn die „start_date“ und „end_date“ leer sind, werden alles Datum gezeigt.
+sasonalitaetWoche	True/False	bool	Ob wöchentlicher Einfluss in Modell addiert wird.
+sasonalitaetMonat	True/False	bool	Ob monatlicher Einfluss in Modell addiert wird
+sasonalitaetJahr	True/False	bool	Ob jährlicher Einfluss in Modell addiert wird
+gesetzlicheFeiertag	True/False	bool	Ob die Einflüsse von gesetzlichen Feiertagen in Modell addiert werden
+sonderEffekt	0/1/2/3	int	0: kein Sondereffekt, 1: Corona, 2: Werbeaktion, 3: Corona und Werbeaktion
+predict_period	Z.B. 365	int	Zeitraum von Prognose
+
+Run „main.py“, werden Preisänderung von gewünschter Kategorie in ausgewähltem Zeitraum, Trend, Analyse nach Saisonalitäten und Sondereffekten sowie Prognose in einer eingestellten Periode erhalten.
