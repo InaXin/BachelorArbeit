@@ -4,8 +4,8 @@ from DatabaseProcessor import *
 
 
 #======================================setting parameters===========================================================
-category_name = "Toilettenartikel"                  ###aus CategoyListForTest.xlsx aussuchen
-start_date = "2020-02-11"                           ### Format muss "YYYY-MM-DD". Kann auch leer sein. Wenn die start_date und end_date leer sind, werden alle Datums gezeigt.
+category_name = "Desinfektionsmittel"               ###aus CategoyListForTest.xlsx aussuchen
+start_date = "2020-02-07"                           ### Format muss "YYYY-MM-DD". Kann auch leer sein. Wenn die start_date und end_date leer sind, werden alle Datums gezeigt.
 end_date = "2021-02-06"                             ### Format muss "YYYY-MM-DD". Kann auch leer sein. Wenn die start_date und end_date leer sind, werden alle Datums gezeigt.
 sasonalitaetWoche = False                           ### bool, Ob wöchentlicher Einfluss in Modell addiert wird.
 sasonalitaetMonat = False                           ### bool, Ob monatlicher Einfluss in Modell addiert wird
